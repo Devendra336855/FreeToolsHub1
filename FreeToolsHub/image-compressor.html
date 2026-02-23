@@ -1,0 +1,393 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Image Compressor - Reduce Image Size Online</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+  <style>
+    /* Page-specific styles for image compressor */
+    .trust-line {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+      color: #64748b;
+    }
+    .upload-area {
+      border: 2px dashed var(--gray-light);
+      background: white;
+      border-radius: 1rem;
+      padding: 3rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin: 2rem 0;
+    }
+    .upload-area:hover, .upload-area.dragover {
+      border-color: var(--primary);
+      background: #eff6ff;
+    }
+    .upload-area.has-file {
+      border-color: var(--secondary);
+      background: #f0fdf4;
+      padding: 2rem;
+    }
+    .upload-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .upload-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 2rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+    .file-info {
+      margin-top: 1rem;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+    .selected-file {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      font-weight: 500;
+    }
+    .selected-file .file-name {
+      color: var(--primary);
+    }
+    .settings-panel {
+      background: #f1f5f9;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      margin: 2rem 0;
+    }
+    .settings-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      align-items: flex-end;
+    }
+    .setting-item {
+      flex: 1 1 200px;
+    }
+    .setting-item label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 500;
+    }
+    .recommended-badge {
+      background: var(--secondary);
+      color: white;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 1rem;
+      margin-left: 0.5rem;
+    }
+    .compress-btn-wrapper {
+      text-align: center;
+      margin: 1.5rem 0;
+    }
+    .compress-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 1rem 3rem;
+      border-radius: 3rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+    }
+    .compress-btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(37,99,235,0.4);
+    }
+    .compress-btn:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+    .progress-container {
+      margin: 2rem 0;
+      display: none;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 0.8rem;
+      background: #e2e8f0;
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.3s;
+    }
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .preview-area {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      background: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+    }
+    .preview-image {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+    }
+    .result-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin: 2rem 0;
+      display: none;
+    }
+    .success-badge {
+      background: var(--secondary);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    .size-stats {
+      display: flex;
+      gap: 2rem;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+    .stat {
+      background: #f8fafc;
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+    }
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .security-message {
+      background: #f1f5f9;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      margin: 2rem 0;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .feature-item {
+      text-align: center;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+    }
+    .feature-icon {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .seo-guide {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      margin: 3rem 0;
+    }
+    .faq-item {
+      margin-bottom: 1.5rem;
+    }
+    .faq-question {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="index.html" class="logo">FreeToolsHub</a>
+      <nav>
+        <a href="index.html">Tools</a>
+        <a href="resume-builder.html">Resume</a>
+        <a href="#">Blog</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 2rem 0 4rem;">
+    <!-- Page Title -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h1>🖼️ Compress Image Online</h1>
+      <p style="font-size: 1.2rem; color: #475569;">Reduce image size without losing quality.</p>
+      <div class="trust-line">
+        <span>✔ Free</span>
+        <span>✔ Secure</span>
+        <span>✔ No Watermark</span>
+      </div>
+    </div>
+
+    <!-- Upload Area -->
+    <div id="uploadArea" class="upload-area">
+      <div class="upload-icon">📁</div>
+      <h3>Drag & Drop Image Here</h3>
+      <p style="color: #64748b; margin: 0.5rem 0;">or</p>
+      <button type="button" id="uploadBtn" class="upload-btn">Upload Image</button>
+      <input type="file" id="fileInput" accept="image/*" style="display: none;">
+      <div class="file-info">
+        <span>Supported: JPG • PNG • WEBP • Max size: 10MB</span>
+      </div>
+      <div id="selectedFileInfo" class="selected-file" style="display: none;"></div>
+    </div>
+
+    <!-- Compression Settings -->
+    <div class="settings-panel">
+      <h3 style="margin-top: 0;">Compression Settings</h3>
+      <div class="settings-row">
+        <div class="setting-item">
+          <label>Target size:</label>
+          <select id="targetSize" style="width:100%; padding:0.5rem; border-radius:0.5rem;">
+            <option value="0.1">Under 100 KB</option>
+            <option value="0.5">Under 500 KB</option>
+            <option value="1" selected>Under 1 MB</option>
+            <option value="5">Under 5 MB</option>
+            <option value="10">Under 10 MB</option>
+          </select>
+        </div>
+        <div class="setting-item">
+          <label>Compression level:</label>
+          <select id="compressionLevel" style="width:100%; padding:0.5rem; border-radius:0.5rem;">
+            <option value="low">Low (High Quality)</option>
+            <option value="medium" selected>Medium <span class="recommended-badge">Recommended</span></option>
+            <option value="high">High (Small Size)</option>
+          </select>
+        </div>
+        <div class="setting-item">
+          <label>Resize width (px):</label>
+          <input type="number" id="resizeWidth" placeholder="Optional" min="1" style="width:100%; padding:0.5rem; border-radius:0.5rem; border:1px solid var(--gray-light);">
+        </div>
+        <div class="setting-item">
+          <label style="display: flex; align-items: center; gap:0.5rem;">
+            <input type="checkbox" id="maintainAspect" checked>
+            Maintain aspect ratio
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compress Button (disabled initially) -->
+    <div class="compress-btn-wrapper">
+      <button id="compressBtn" class="compress-btn" disabled>⚡ Compress Image</button>
+    </div>
+
+    <!-- Processing Animation (hidden initially) -->
+    <div id="progressContainer" class="progress-container">
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+      <div class="progress-text">
+        <span>Compressing your image securely…</span>
+        <span id="progressPercent">0%</span>
+      </div>
+    </div>
+
+    <!-- Result Card (hidden initially) -->
+    <div id="resultCard" class="result-card">
+      <div class="success-badge">✅ File compressed successfully!</div>
+      <div id="previewContainer" class="preview-area">
+        <img id="previewImage" class="preview-image" src="" alt="Preview">
+        <div>
+          <div>Original: <span id="originalSize">0 KB</span></div>
+          <div>Compressed: <span id="compressedSize">0 KB</span></div>
+          <div>Reduction: <span id="reductionPercent">0%</span></div>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <a id="downloadLink" href="#" download="compressed.jpg" class="btn btn-primary">🔵 Download Image</a>
+        <button id="compressAnother" class="btn btn-secondary">🔄 Compress Another</button>
+      </div>
+    </div>
+
+    <!-- Security Trust Message -->
+    <div class="security-message">
+      <span style="font-size: 1.5rem; margin-right: 0.5rem;">🔒</span>
+      Files deleted automatically after processing • Secure & private processing
+    </div>
+
+    <!-- Benefits Section -->
+    <h2 style="text-align: center; margin: 3rem 0 1rem;">⭐ Why use this tool?</h2>
+    <div class="features-grid">
+      <div class="feature-item"><span class="feature-icon">📋</span> Reduce image size for forms</div>
+      <div class="feature-item"><span class="feature-icon">🚀</span> Faster website uploads</div>
+      <div class="feature-item"><span class="feature-icon">💾</span> Save storage space</div>
+      <div class="feature-item"><span class="feature-icon">📤</span> Share photos easily</div>
+    </div>
+
+    <!-- SEO Content / FAQ -->
+    <div class="seo-guide">
+      <h3>How to Compress an Image Online?</h3>
+      <ol style="margin-bottom: 2rem;">
+        <li>Upload your image</li>
+        <li>Choose target size and compression level</li>
+        <li>(Optional) Set resize width</li>
+        <li>Click "Compress Image"</li>
+        <li>Download your compressed image</li>
+      </ol>
+      <h3>Frequently Asked Questions</h3>
+      <div class="faq-item">
+        <div class="faq-question">Does compression reduce quality?</div>
+        <p>No, quality remains visually similar. Our tool optimizes file size while preserving clarity.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Is my image stored?</div>
+        <p>No, files are processed in your browser and deleted automatically after 30 minutes.</p>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Is it free?</div>
+        <p>Yes, 100% free with no watermark.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 FreeToolsHub. All tools are 100% free and private.</p>
+    </div>
+  </footer>
+
+  <script src="js/image-compressor.js"></script>
+</body>
+</html>

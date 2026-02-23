@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free PDF to Word Converter - Online & Secure</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <!-- pdf.js only -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <style>
+    /* (keep all your existing styles – unchanged) */
+    .trust-line { display: flex; justify-content: center; gap: 1.5rem; margin-top: 0.5rem; color: #64748b; }
+    .upload-area { border: 2px dashed var(--gray-light); background: white; border-radius: 1rem; padding: 3rem 2rem; text-align: center; cursor: pointer; transition: all 0.3s; margin: 2rem 0; }
+    .upload-area:hover, .upload-area.dragover { border-color: var(--primary); background: #eff6ff; }
+    .upload-area.has-file { border-color: var(--secondary); background: #f0fdf4; padding: 2rem; }
+    .upload-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .upload-btn { background: var(--primary); color: white; border: none; padding: 0.75rem 2rem; border-radius: 2rem; font-weight: 500; cursor: pointer; display: inline-block; margin-top: 1rem; }
+    .file-info { margin-top: 1rem; color: #64748b; font-size: 0.9rem; }
+    .selected-file { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 1rem; font-weight: 500; }
+    .selected-file .file-name { color: var(--primary); }
+    .convert-btn-wrapper { text-align: center; margin: 1.5rem 0; }
+    .convert-btn { background: var(--primary); color: white; border: none; padding: 1rem 3rem; border-radius: 3rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+    .convert-btn:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37,99,235,0.4); }
+    .convert-btn:disabled { background: #94a3b8; cursor: not-allowed; box-shadow: none; transform: none; }
+    .progress-container { margin: 2rem 0; display: none; }
+    .progress-bar { width: 100%; height: 0.8rem; background: #e2e8f0; border-radius: 1rem; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
+    .progress-text { display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.9rem; }
+    .result-card { background: white; border-radius: 1rem; padding: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin: 2rem 0; display: none; }
+    .success-badge { background: var(--secondary); color: white; padding: 0.5rem 1rem; border-radius: 2rem; display: inline-block; margin-bottom: 1rem; }
+    .action-buttons { display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; justify-content: center; }
+    .security-message { background: #f1f5f9; padding: 1rem; border-radius: 0.5rem; text-align: center; margin: 2rem 0; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+    .feature-item { text-align: center; background: white; padding: 1.5rem; border-radius: 0.5rem; }
+    .feature-icon { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+    .steps { display: flex; justify-content: space-around; gap: 2rem; margin: 2rem 0; flex-wrap: wrap; }
+    .step { text-align: center; flex: 1; min-width: 120px; }
+    .step-number { width: 40px; height: 40px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-weight: bold; }
+    .related-tools { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 2rem 0; }
+    .tool-card { background: white; padding: 1rem; border-radius: 0.5rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: transform 0.3s; }
+    .tool-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .tool-card a { text-decoration: none; color: var(--text); font-weight: 500; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="index.html" class="logo">FreeToolsHub</a>
+      <nav>
+        <a href="index.html">Tools</a>
+        <a href="resume-builder.html">Resume</a>
+        <a href="#">Blog</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 2rem 0 4rem;">
+    <!-- Page Title -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h1>📄 Convert PDF to Word Online</h1>
+      <div class="trust-line">
+        <span>✔ Free</span>
+        <span>✔ Secure</span>
+        <span>✔ No Watermark</span>
+        <span>✔ Instant Download</span>
+      </div>
+    </div>
+
+    <!-- Upload Area -->
+    <div id="uploadArea" class="upload-area">
+      <div class="upload-icon">📁</div>
+      <h3>Drag & Drop your PDF here</h3>
+      <p style="color: #64748b; margin: 0.5rem 0;">or</p>
+      <button type="button" id="uploadBtn" class="upload-btn">Click to Upload</button>
+      <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+      <div class="file-info">
+        <span>Supported: PDF files up to 25MB</span>
+      </div>
+      <div id="selectedFileInfo" class="selected-file" style="display: none;"></div>
+    </div>
+
+    <!-- Convert Button (disabled initially) -->
+    <div class="convert-btn-wrapper">
+      <button id="convertBtn" class="convert-btn" disabled>🔵 Convert to Word</button>
+    </div>
+
+    <!-- Progress Indicator (hidden initially) -->
+    <div id="progressContainer" class="progress-container">
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+      <div class="progress-text">
+        <span id="progressMessage">Uploading…</span>
+        <span id="progressPercent">0%</span>
+      </div>
+    </div>
+
+    <!-- Success Screen (hidden initially) -->
+    <div id="resultCard" class="result-card">
+      <div class="success-badge">✅ Your file is ready!</div>
+      <div style="text-align: center; margin: 1.5rem 0;">
+        <p><strong>Original file:</strong> <span id="originalFileName"></span></p>
+        <p><strong>Pages extracted:</strong> <span id="pageCount">0</span></p>
+      </div>
+      <div class="action-buttons">
+        <a id="downloadLink" href="#" download="converted.doc" class="btn btn-primary">📥 Download Word File</a>
+        <button id="convertAnother" class="btn btn-secondary">📄 Convert Another File</button>
+      </div>
+      <div style="margin-top: 1.5rem; text-align: center;">
+        <span style="font-size: 1.2rem;">⭐ Rate this tool</span>
+        <span style="margin-left: 1rem;">📤 Share with friends</span>
+      </div>
+    </div>
+
+    <!-- Safety & Privacy Notice -->
+    <div class="security-message">
+      <span style="font-size: 1.5rem; margin-right: 0.5rem;">🔒</span>
+      Files deleted automatically after 1 hour • Secure & private processing
+    </div>
+
+    <!-- Tool Features Section -->
+    <h2 style="text-align: center; margin: 3rem 0 1rem;">Why Use Our Converter?</h2>
+    <div class="features-grid">
+      <div class="feature-item"><span class="feature-icon">🎯</span> Accurate formatting</div>
+      <div class="feature-item"><span class="feature-icon">⚡</span> Fast conversion</div>
+      <div class="feature-item"><span class="feature-icon">🔒</span> Secure processing</div>
+      <div class="feature-item"><span class="feature-icon">🚫</span> No watermark</div>
+      <div class="feature-item"><span class="feature-icon">📱</span> Works on mobile</div>
+    </div>
+
+    <!-- How It Works (Simple Steps) -->
+    <h2 style="text-align: center; margin: 3rem 0 1rem;">How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Upload PDF</h3>
+        <p>Drag & drop or click to upload</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Conversion starts instantly</h3>
+        <p>We extract text and layout</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Download Word file</h3>
+        <p>Get your editable document</p>
+      </div>
+    </div>
+
+    <!-- Related Tools (Keep Users Engaged) -->
+    <h2 style="text-align: center; margin: 3rem 0 1rem;">Related Tools</h2>
+    <div class="related-tools">
+      <div class="tool-card">
+        <a href="pdf-compressor.html">📄 Compress PDF</a>
+      </div>
+      <div class="tool-card">
+        <a href="#">📄 Merge PDF</a>
+      </div>
+      <div class="tool-card">
+        <a href="#">📄 PDF to JPG</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 FreeToolsHub. All tools are 100% free and private.</p>
+    </div>
+  </footer>
+
+  <script src="js/pdf-to-word.js"></script>
+</body>
+</html>

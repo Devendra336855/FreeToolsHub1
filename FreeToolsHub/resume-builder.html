@@ -1,0 +1,830 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Resume Builder - ATS-Friendly Professional Resumes</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <!-- SortableJS for drag-drop reorder -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <!-- html2pdf for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    /* Color palette */
+    :root {
+      --deep-blue: #1E3A8A;
+      --emerald: #10B981;
+      --charcoal: #1F2937;
+      --soft-gray: #F9FAFB;
+      --accent-orange: #F59E0B;
+      --border-light: #E5E7EB;
+      --text-primary: #111827;
+      --text-secondary: #4B5563;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--soft-gray);
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Header */
+    header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--deep-blue);
+      text-decoration: none;
+    }
+
+    nav a {
+      margin-left: 2rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--deep-blue);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background: var(--deep-blue);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #153E7A;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(30,58,138,0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--deep-blue);
+      border: 1px solid var(--deep-blue);
+    }
+
+    .btn-secondary:hover {
+      background: #F0F4FF;
+    }
+
+    .btn-accent {
+      background: var(--accent-orange);
+      color: white;
+    }
+
+    .btn-accent:hover {
+      background: #E68A00;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 4rem 0;
+      background: white;
+    }
+
+    .hero .container {
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+    }
+
+    .hero-content {
+      flex: 1;
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      color: var(--deep-blue);
+    }
+
+    .hero-content p {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .hero-preview {
+      flex: 1;
+      background: var(--soft-gray);
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 20px 30px -10px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-preview::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--deep-blue), var(--emerald));
+    }
+
+    .hero-preview-inner {
+      background: white;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+    }
+
+    .hero-preview-name {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--deep-blue);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-preview-title {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .hero-preview-section {
+      margin: 1rem 0;
+    }
+
+    .hero-preview-section-title {
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Trust badges */
+    .trust-badges {
+      display: flex;
+      gap: 2rem;
+      margin: 2rem 0;
+      justify-content: center;
+    }
+
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    /* Template grid */
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .template-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform 0.3s;
+      position: relative;
+      border: 1px solid var(--border-light);
+      cursor: pointer;
+    }
+
+    .template-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .template-card.selected {
+      border: 2px solid var(--deep-blue);
+    }
+
+    .template-preview {
+      height: 150px;
+      background: #f1f5f9;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .popular-badge {
+      position: absolute;
+      top: -0.5rem;
+      right: -0.5rem;
+      background: var(--emerald);
+      color: white;
+      padding: 0.2rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .premium-label {
+      background: var(--accent-orange);
+      color: white;
+      padding: 0.2rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      display: inline-block;
+      margin-top: 0.5rem;
+    }
+
+    /* Step Progress */
+    .step-progress {
+      display: flex;
+      justify-content: space-between;
+      margin: 2rem 0;
+      position: relative;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .step-progress::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border-light);
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+
+    .step {
+      background: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: 2rem;
+      border: 1px solid var(--border-light);
+      position: relative;
+      z-index: 2;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .step.active {
+      background: var(--deep-blue);
+      color: white;
+      border-color: var(--deep-blue);
+    }
+
+    .step.completed {
+      background: var(--emerald);
+      color: white;
+      border-color: var(--emerald);
+    }
+
+    /* Main Builder Layout */
+    .builder-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    /* Left Form Panel */
+    .form-panel {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .form-section {
+      background: var(--soft-gray);
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-section h3 {
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--deep-blue);
+    }
+
+    .dynamic-item {
+      background: white;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border-light);
+    }
+
+    /* Form inputs */
+    input, textarea, select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border-light);
+      border-radius: 0.5rem;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+      margin-bottom: 0.5rem;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--deep-blue);
+    }
+
+    /* Skill tags */
+    .skill-tag {
+      display: inline-block;
+      background: var(--emerald);
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 2rem;
+      margin: 0.2rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .skill-tag:hover {
+      background: #0EA371;
+    }
+
+    /* Right Preview Panel */
+    .preview-panel {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 90px;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .zoom-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .zoom-controls button {
+      background: var(--soft-gray);
+      border: none;
+      padding: 0.3rem 0.8rem;
+      border-radius: 0.3rem;
+      cursor: pointer;
+    }
+
+    .preview-resume {
+      transform-origin: top left;
+      transition: transform 0.2s;
+    }
+
+    /* Resume strength meter */
+    .strength-meter {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .meter-bar {
+      height: 0.8rem;
+      background: var(--border-light);
+      border-radius: 1rem;
+      overflow: hidden;
+      margin: 0.5rem 0;
+    }
+
+    .meter-fill {
+      height: 100%;
+      background: var(--emerald);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    /* Download options */
+    .download-options {
+      display: flex;
+      gap: 1rem;
+      margin: 2rem 0;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      display: flex;
+      gap: 2rem;
+      margin: 2rem 0;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .testimonial {
+      text-align: center;
+      max-width: 200px;
+    }
+
+    .testimonial img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-bottom: 0.5rem;
+    }
+
+    .testimonial p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--charcoal);
+      color: white;
+      padding: 3rem 0;
+      margin-top: 3rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 2rem;
+    }
+
+    .footer-grid a {
+      color: #9CA3AF;
+      text-decoration: none;
+      display: block;
+      margin: 0.5rem 0;
+    }
+
+    .footer-grid a:hover {
+      color: white;
+    }
+
+    /* Micro-interactions */
+    .btn, .step, .template-card {
+      transition: all 0.2s;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .hero .container {
+        flex-direction: column;
+        gap: 2rem;
+      }
+      .builder-container {
+        grid-template-columns: 1fr;
+      }
+      .preview-panel {
+        position: static;
+      }
+      .step-progress {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .step-progress::before {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="index.html" class="logo">FreeToolsHub</a>
+      <nav>
+        <a href="index.html">Tools</a>
+        <a href="resume-builder.html">Resume</a>
+        <a href="#">Blog</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section with Preview Animation -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Build a Job-Winning Resume in Minutes.</h1>
+          <p>ATS-friendly templates. AI suggestions. Instant download.</p>
+          <div class="hero-buttons">
+            <button id="createResumeBtn" class="btn btn-primary">Create Resume</button>
+            <button class="btn btn-secondary" onclick="alert('Demo video would play here')">▶️ See Demo</button>
+          </div>
+          <div class="trust-badges">
+            <span class="badge">⭐ ATS Friendly</span>
+            <span class="badge">🔒 Secure</span>
+            <span class="badge">⚡ Instant</span>
+          </div>
+        </div>
+        <div class="hero-preview">
+          <div class="hero-preview-inner">
+            <div class="hero-preview-name">John Doe</div>
+            <div class="hero-preview-title">Software Engineer</div>
+            <div class="hero-preview-section">
+              <div class="hero-preview-section-title">Experience</div>
+              <div>• Led development of...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <!-- Template Selection (Step 0) -->
+      <div id="templateSection" style="margin-bottom:2rem;">
+        <h2 style="text-align: center;">Choose an ATS-Friendly Template</h2>
+        <div class="template-grid">
+          <div class="template-card" data-template="modern">
+            <div class="template-preview">📄 Modern Professional</div>
+            <h4>Modern Professional</h4>
+            <span class="popular-badge">⭐ Most Popular</span>
+          </div>
+          <div class="template-card" data-template="minimal">
+            <div class="template-preview">📄 Minimal ATS</div>
+            <h4>Minimal ATS-Friendly</h4>
+          </div>
+          <div class="template-card" data-template="fresher">
+            <div class="template-preview">👔 Fresher Resume</div>
+            <h4>Fresher Resume</h4>
+          </div>
+          <div class="template-card" data-template="creative">
+            <div class="template-preview">🎨 Creative</div>
+            <h4>Creative Designer</h4>
+          </div>
+          <div class="template-card" data-template="executive">
+            <div class="template-preview">💼 Executive</div>
+            <h4>Executive</h4>
+            <span class="premium-label">Premium</span>
+          </div>
+        </div>
+        <div style="text-align: center;">
+          <button id="nextToForm" class="btn btn-primary">Use Selected Template</button>
+        </div>
+      </div>
+
+      <!-- Step Progress -->
+      <div id="stepProgress" class="step-progress" style="display: none;">
+        <span class="step" data-step="1">Personal Info</span>
+        <span class="step" data-step="2">Summary</span>
+        <span class="step" data-step="3">Education</span>
+        <span class="step" data-step="4">Experience</span>
+        <span class="step" data-step="5">Skills</span>
+        <span class="step" data-step="6">Projects</span>
+        <span class="step" data-step="7">Certifications</span>
+        <span class="step" data-step="8">Extras</span>
+      </div>
+
+      <!-- Main Builder: Left Form + Right Preview -->
+      <div id="builderContainer" class="builder-container" style="display: none;">
+        <!-- Left Form Panel -->
+        <div class="form-panel">
+          <!-- Step 1: Personal Info -->
+          <div id="step1" class="form-section">
+            <h3>Personal Information</h3>
+            <input type="text" id="fullName" placeholder="Full Name *">
+            <input type="text" id="jobTitle" placeholder="Job Title (e.g., Software Developer)">
+            <input type="tel" id="phone" placeholder="Phone Number">
+            <input type="email" id="email" placeholder="Email Address *">
+            <input type="url" id="linkedin" placeholder="LinkedIn URL">
+            <input type="url" id="portfolio" placeholder="Portfolio/GitHub URL">
+            <input type="text" id="address" placeholder="Address (optional)">
+            <label style="display:block;">
+              Profile Photo:
+              <input type="file" id="photo" accept="image/*">
+            </label>
+          </div>
+
+          <!-- Step 2: Professional Summary -->
+          <div id="step2" class="form-section" style="display: none;">
+            <h3>Professional Summary</h3>
+            <textarea id="summary" rows="4" placeholder="Write 2-4 lines about yourself..."></textarea>
+            <div style="margin-top: 0.5rem;">
+              <small>Suggestions:</small>
+              <button class="btn btn-secondary suggestion" data-target="summary" data-value="Recent graduate with a degree in Computer Science, passionate about building web applications.">Fresher</button>
+              <button class="btn btn-secondary suggestion" data-target="summary" data-value="Experienced software engineer with 5+ years in full-stack development, leading teams to deliver scalable solutions.">Experienced</button>
+            </div>
+          </div>
+
+          <!-- Step 3: Education (dynamic) -->
+          <div id="step3" class="form-section" style="display: none;">
+            <h3>Education <button id="addEdu" class="btn btn-secondary" style="padding:0.2rem 1rem;">+ Add</button></h3>
+            <div id="eduContainer" class="sortable-container"></div>
+          </div>
+
+          <!-- Step 4: Work Experience (dynamic) -->
+          <div id="step4" class="form-section" style="display: none;">
+            <h3>Work Experience <button id="addExp" class="btn btn-secondary" style="padding:0.2rem 1rem;">+ Add</button></h3>
+            <div id="expContainer" class="sortable-container"></div>
+            <p><small>Freshers can skip this section.</small></p>
+          </div>
+
+          <!-- Step 5: Skills -->
+          <div id="step5" class="form-section" style="display: none;">
+            <h3>Skills</h3>
+            <div id="skillsContainer" style="margin-bottom:0.5rem;"></div>
+            <input type="text" id="skillInput" placeholder="Type a skill and press Enter">
+            <div style="margin-top: 0.5rem;">
+              <small>Suggestions:</small>
+              <button class="btn btn-secondary skill-suggestion" data-skill="JavaScript">JavaScript</button>
+              <button class="btn btn-secondary skill-suggestion" data-skill="Python">Python</button>
+              <button class="btn btn-secondary skill-suggestion" data-skill="React">React</button>
+              <button class="btn btn-secondary skill-suggestion" data-skill="Project Management">PM</button>
+              <button class="btn btn-secondary skill-suggestion" data-skill="Communication">Communication</button>
+            </div>
+          </div>
+
+          <!-- Step 6: Projects (dynamic) -->
+          <div id="step6" class="form-section" style="display: none;">
+            <h3>Projects <button id="addProject" class="btn btn-secondary" style="padding:0.2rem 1rem;">+ Add</button></h3>
+            <div id="projectContainer" class="sortable-container"></div>
+          </div>
+
+          <!-- Step 7: Certifications (dynamic) -->
+          <div id="step7" class="form-section" style="display: none;">
+            <h3>Certifications <button id="addCert" class="btn btn-secondary" style="padding:0.2rem 1rem;">+ Add</button></h3>
+            <div id="certContainer" class="sortable-container"></div>
+          </div>
+
+          <!-- Step 8: Extra Sections -->
+          <div id="step8" class="form-section" style="display: none;">
+            <h3>Extra Sections</h3>
+            <div style="margin-bottom:0.5rem;">
+              <label><input type="checkbox" id="showLanguages"> Languages</label>
+            </div>
+            <div id="languagesSection" style="display:none; margin-bottom:1rem;">
+              <input type="text" id="languages" placeholder="e.g., English (Fluent), Spanish (Basic)">
+            </div>
+            <div style="margin-bottom:0.5rem;">
+              <label><input type="checkbox" id="showHobbies"> Hobbies</label>
+            </div>
+            <div id="hobbiesSection" style="display:none; margin-bottom:1rem;">
+              <input type="text" id="hobbies" placeholder="e.g., Reading, Chess">
+            </div>
+            <div style="margin-bottom:0.5rem;">
+              <label><input type="checkbox" id="showVolunteer"> Volunteer Work</label>
+            </div>
+            <div id="volunteerSection" style="display:none; margin-bottom:1rem;">
+              <textarea id="volunteer" rows="2" placeholder="Describe your volunteer experience"></textarea>
+            </div>
+          </div>
+
+          <!-- Navigation buttons -->
+          <div style="display: flex; justify-content: space-between; margin: 1rem 0;">
+            <button id="prevStep" class="btn btn-secondary" style="display: none;">Previous</button>
+            <button id="nextStep" class="btn btn-primary">Next</button>
+          </div>
+        </div>
+
+        <!-- Right Preview Panel -->
+        <div class="preview-panel">
+          <div class="preview-header">
+            <h3>Live Preview</h3>
+            <div class="zoom-controls">
+              <button id="zoomOut">−</button>
+              <span id="zoomLevel">100%</span>
+              <button id="zoomIn">+</button>
+            </div>
+          </div>
+          <div id="resumePreview" class="preview-resume"></div>
+          <!-- Page view options (simulated) -->
+          <div style="margin-top:1rem; text-align:right;">
+            <span>📄 Page 1/1</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resume Strength Meter -->
+      <div id="strengthMeter" class="strength-meter" style="display: none;">
+        <h3>Resume Strength</h3>
+        <div class="meter-bar">
+          <div id="meterFill" class="meter-fill"></div>
+        </div>
+        <p>ATS Compatibility: <span id="atsScore">85%</span> - Good</p>
+        <p id="improvementTip">Tip: Add more skills to improve your score.</p>
+      </div>
+
+      <!-- Download Options -->
+      <div id="downloadOptions" class="download-options" style="display: none;">
+        <button id="downloadPdf" class="btn btn-primary">📥 Download PDF</button>
+        <button id="downloadDoc" class="btn btn-secondary">📄 Download DOCX</button>
+        <button id="printResume" class="btn btn-secondary">🖨️ Print</button>
+      </div>
+
+      <!-- Testimonials -->
+      <div class="testimonials">
+        <div class="testimonial">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User">
+          <p>"Got hired within 2 weeks!"</p>
+        </div>
+        <div class="testimonial">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+          <p>"Better than paid tools."</p>
+        </div>
+        <div class="testimonial">
+          <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="User">
+          <p>"ATS score improved 40%."</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>Templates</h4>
+          <a href="#">Modern</a>
+          <a href="#">Minimal</a>
+          <a href="#">Creative</a>
+        </div>
+        <div>
+          <h4>Pricing</h4>
+          <a href="#">Free</a>
+          <a href="#">Premium</a>
+        </div>
+        <div>
+          <h4>Career Tips</h4>
+          <a href="#">Blog</a>
+          <a href="#">Guides</a>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <a href="#">Support</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+      <p style="text-align:center; margin-top:2rem; color:#9CA3AF;">© 2025 FreeToolsHub. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/resume-builder.js"></script>
+</body>
+</html>

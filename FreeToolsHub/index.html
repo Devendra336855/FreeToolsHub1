@@ -1,0 +1,504 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreeToolsHub - Free Online Tools</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* Color palette */
+    :root {
+      --primary: #2563eb;
+      --secondary: #22c55e;
+      --accent: #7c3aed;
+      --bg: #f8fafc;
+      --text: #1e293b;
+      --gray-light: #e2e8f0;
+      --card-bg: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Roboto', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Header */
+    header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    nav a {
+      margin-left: 2rem;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 4rem 0;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #475569;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+
+    /* Search bar */
+    .search-bar {
+      max-width: 500px;
+      margin: 2rem auto;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      border: 1px solid var(--gray-light);
+      border-radius: 3rem;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .search-bar input:focus {
+      border-color: var(--primary);
+    }
+
+    .search-bar button {
+      padding: 1rem 2rem;
+      border-radius: 3rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .search-bar button:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+    }
+
+    /* Quick buttons */
+    .quick-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+    }
+
+    .quick-btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 2rem;
+      font-weight: 500;
+      text-decoration: none;
+      color: white;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .quick-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+
+    .quick-btn:nth-child(1) { background: var(--primary); }
+    .quick-btn:nth-child(2) { background: var(--secondary); }
+    .quick-btn:nth-child(3) { background: var(--accent); }
+
+    /* Popular tools grid */
+    .section-title {
+      text-align: center;
+      margin: 3rem 0 1.5rem;
+      font-size: 2rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: all 0.3s;
+      border: 1px solid var(--gray-light);
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+    }
+
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      color: #64748b;
+      margin-bottom: 1.5rem;
+    }
+
+    .most-used-badge {
+      position: absolute;
+      top: -0.5rem;
+      right: -0.5rem;
+      background: var(--secondary);
+      color: white;
+      padding: 0.2rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(37,99,235,0.2);
+    }
+
+    /* Categories tabs */
+    .categories {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      padding: 0.5rem 1.5rem;
+      border-radius: 2rem;
+      background: white;
+      border: 1px solid var(--gray-light);
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .tab.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .tab:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Trust section */
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 2rem;
+      margin: 4rem 0;
+      text-align: center;
+    }
+
+    .trust-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      border: 1px solid var(--gray-light);
+      transition: transform 0.3s;
+    }
+
+    .trust-item:hover {
+      transform: translateY(-3px);
+    }
+
+    .trust-item i {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .trust-item span {
+      font-weight: 500;
+    }
+
+    /* How it works steps */
+    .steps {
+      display: flex;
+      justify-content: space-around;
+      gap: 2rem;
+      margin: 3rem 0;
+      flex-wrap: wrap;
+    }
+
+    .step {
+      text-align: center;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-weight: bold;
+    }
+
+    /* Footer */
+    footer {
+      background: white;
+      padding: 2rem 0;
+      margin-top: 4rem;
+      text-align: center;
+      border-top: 1px solid var(--gray-light);
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+      nav a { margin-left: 1rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      .steps { flex-direction: column; }
+      .trust-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="index.html" class="logo">FreeToolsHub</a>
+      <nav>
+        <a href="index.html">Tools</a>
+        <a href="resume-builder.html">Resume</a>
+        <a href="#">Blog</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <h1>⚡ Free Online Tools That Save Your Time</h1>
+        <p>Compress PDFs, optimize images, convert files & build resumes instantly.</p>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+          <input type="text" placeholder="🔍 Search tools... (e.g., PDF compressor)">
+          <button><i class="fas fa-search"></i> Search</button>
+        </div>
+
+        <!-- Quick Buttons -->
+        <div class="quick-buttons">
+          <a href="pdf-compressor.html" class="quick-btn"><i class="fas fa-file-pdf"></i> Compress PDF</a>
+          <a href="image-compressor.html" class="quick-btn"><i class="fas fa-image"></i> Compress Image</a>
+          <a href="pdf-to-word.html" class="quick-btn"><i class="fas fa-file-word"></i> PDF to Word</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Popular Tools -->
+    <section class="container">
+      <h2 class="section-title">⭐ Popular Tools</h2>
+      <div class="card-grid">
+        <!-- Card 1: PDF Compressor with Most Used badge -->
+        <div class="card">
+          <span class="most-used-badge">Most Used</span>
+          <div class="card-icon"><i class="fas fa-file-pdf" style="color:#2563eb;"></i></div>
+          <h3>PDF Compressor</h3>
+          <p>Reduce PDF size below 1MB</p>
+          <a href="pdf-compressor.html" class="btn btn-primary">Use Tool</a>
+        </div>
+        <!-- Card 2: Image Compressor -->
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-image" style="color:#22c55e;"></i></div>
+          <h3>Image Compressor</h3>
+          <p>Compress photo under 100KB</p>
+          <a href="image-compressor.html" class="btn btn-primary">Use Tool</a>
+        </div>
+        <!-- Card 3: PDF to Word -->
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-file-word" style="color:#7c3aed;"></i></div>
+          <h3>PDF to Word</h3>
+          <p>Convert PDF to editable DOCX</p>
+          <a href="pdf-to-word.html" class="btn btn-primary">Use Tool</a>
+        </div>
+        <!-- Card 4: Resume Builder -->
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-file-alt" style="color:#2563eb;"></i></div>
+          <h3>Resume Builder</h3>
+          <p>Create professional resumes</p>
+          <a href="resume-builder.html" class="btn btn-primary">Use Tool</a>
+        </div>
+        <!-- Card 5: Word Counter -->
+        <div class="card">
+          <div class="card-icon"><i class="fas fa-calculator" style="color:#22c55e;"></i></div>
+          <h3>Word Counter</h3>
+          <p>Count words & characters</p>
+          <a href="word-counter.html" class="btn btn-primary">Use Tool</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tool Categories -->
+    <section class="container">
+      <h2 class="section-title">📂 Browse by Category</h2>
+      <div class="categories">
+        <span class="tab active"><i class="fas fa-file-pdf"></i> PDF Tools</span>
+        <span class="tab"><i class="fas fa-image"></i> Image Tools</span>
+        <span class="tab"><i class="fas fa-file-alt"></i> Document Tools</span>
+      </div>
+      <!-- Optional: Category content could be shown here, but for simplicity we just have tabs -->
+    </section>
+
+    <!-- Trust Section -->
+    <section class="container">
+      <h2 class="section-title">🔒 Why Choose Us</h2>
+      <div class="trust-grid">
+        <div class="trust-item">
+          <i class="fas fa-check-circle"></i>
+          <span>100% Free</span>
+        </div>
+        <div class="trust-item">
+          <i class="fas fa-lock"></i>
+          <span>Secure Processing</span>
+        </div>
+        <div class="trust-item">
+          <i class="fas fa-ban"></i>
+          <span>No Watermark</span>
+        </div>
+        <div class="trust-item">
+          <i class="fas fa-bolt"></i>
+          <span>Instant Results</span>
+        </div>
+        <div class="trust-item">
+          <i class="fas fa-mobile-alt"></i>
+          <span>Works on Mobile</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="container">
+      <h2 class="section-title">⚙ How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Upload File</h3>
+          <p>Drag & drop or select from device</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Tool Processes</h3>
+          <p>Automatic, fast & private</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Download Result</h3>
+          <p>Get your file instantly</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 FreeToolsHub. All tools are 100% free and private.</p>
+      <p><a href="contact.html">Contact</a> | <a href="#">Privacy</a> | <a href="#">Terms</a></p>
+    </div>
+  </footer>
+</body>
+</html>

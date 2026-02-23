@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - FreeToolsHub</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Page-specific styles for contact page */
+    .hero-contact {
+      text-align: center;
+      padding: 3rem 0;
+      background: #F8FAFC;
+    }
+
+    .hero-contact h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: #1E293B;
+    }
+
+    .hero-contact p {
+      font-size: 1.2rem;
+      color: #475569;
+    }
+
+    .contact-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .contact-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .contact-card .icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .contact-card h3 {
+      margin-bottom: 0.5rem;
+      color: #2563EB;
+    }
+
+    .contact-card p {
+      color: #475569;
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-card small {
+      color: #64748B;
+    }
+
+    .form-container {
+      background: white;
+      border-radius: 1rem;
+      padding: 2.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      max-width: 700px;
+      margin: 3rem auto;
+    }
+
+    .form-container h2 {
+      margin-bottom: 1rem;
+      color: #1E293B;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 500;
+      color: #1E293B;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #E2E8F0;
+      border-radius: 0.5rem;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #2563EB;
+    }
+
+    .submit-btn {
+      background: #2563EB;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      width: 100%;
+    }
+
+    .submit-btn:hover {
+      background: #1D4ED8;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(37,99,235,0.3);
+    }
+
+    .success-message {
+      background: #22C55E;
+      color: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .trust-message {
+      text-align: center;
+      margin: 2rem 0;
+      color: #475569;
+    }
+
+    .trust-message span {
+      font-size: 1.5rem;
+      margin-right: 0.5rem;
+    }
+
+    .faq-section {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      margin: 3rem 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .faq-section h2 {
+      margin-bottom: 1.5rem;
+      color: #1E293B;
+      text-align: center;
+    }
+
+    .faq-item {
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #E2E8F0;
+      padding-bottom: 1rem;
+    }
+
+    .faq-item:last-child {
+      border-bottom: none;
+    }
+
+    .faq-question {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      color: #2563EB;
+    }
+
+    .faq-answer {
+      color: #475569;
+    }
+
+    .company-info {
+      text-align: center;
+      margin: 3rem 0;
+      padding: 1rem;
+      background: #F1F5F9;
+      border-radius: 1rem;
+    }
+
+    .company-info p {
+      margin: 0.5rem 0;
+      color: #1E293B;
+    }
+
+    @media (max-width: 768px) {
+      .hero-contact h1 { font-size: 2rem; }
+      .contact-options { grid-template-columns: 1fr; }
+      .form-container { padding: 1.5rem; }
+    }
+  </style>
+  <!-- Netlify Forms detection (optional) -->
+  <meta name="netlify" content="true">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="index.html" class="logo">FreeToolsHub</a>
+      <nav>
+        <a href="index.html">Tools</a>
+        <a href="resume-builder.html">Resume</a>
+        <a href="#">Blog</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-contact">
+      <div class="container">
+        <h1>📩 Contact Us</h1>
+        <p>We're here to help. Reach out anytime.</p>
+      </div>
+    </section>
+
+    <div class="container">
+      <!-- Contact Options Cards -->
+      <div class="contact-options">
+        <div class="contact-card">
+          <div class="icon">📧</div>
+          <h3>Email Support</h3>
+          <p><a href="mailto:support@freetoolshub.com">support@freetoolshub.com</a></p>
+          <small>Response within 24 hours</small>
+        </div>
+        <div class="contact-card">
+          <div class="icon">💼</div>
+          <h3>Business & Partnerships</h3>
+          <p><a href="mailto:business@freetoolshub.com">business@freetoolshub.com</a></p>
+          <small>For collaborations</small>
+        </div>
+        <div class="contact-card">
+          <div class="icon">📢</div>
+          <h3>Report Issues</h3>
+          <p><a href="mailto:bugs@freetoolshub.com">bugs@freetoolshub.com</a></p>
+          <small>We'll fix them fast</small>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="form-container">
+        <h2>Send us a message</h2>
+        <div id="successMessage" class="success-message">✅ Thank you! Your message has been sent.</div>
+
+        <!-- Netlify Forms enabled -->
+        <form id="contactForm" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="contact" />
+          <!-- Honeypot field -->
+          <p style="display:none;">
+            <label>Don't fill this out: <input name="bot-field" /></label>
+          </p>
+
+          <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <select id="subject" name="subject">
+              <option value="general">General question</option>
+              <option value="bug">Report a bug</option>
+              <option value="business">Business inquiry</option>
+              <option value="feedback">Feedback</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Message *</label>
+            <textarea id="message" name="message" rows="5" required placeholder="Write your message here..."></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+
+        <!-- Trust message -->
+        <div class="trust-message">
+          <span>🔒</span> Your information is safe and never shared.
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="faq-section">
+        <h2>❓ Frequently Asked Questions</h2>
+        <div class="faq-item">
+          <div class="faq-question">How fast do tools process files?</div>
+          <div class="faq-answer">Usually within seconds. All processing happens in your browser, so it's instant.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Are my files stored?</div>
+          <div class="faq-answer">No. Files are deleted automatically after processing. We never store your files.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Is this website free?</div>
+          <div class="faq-answer">Yes, 100% free. No hidden charges.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">How can I contact support?</div>
+          <div class="faq-answer">Use the form above or email us directly at support@freetoolshub.com</div>
+        </div>
+      </div>
+
+      <!-- Company Info (Optional) -->
+      <div class="company-info">
+        <p>📍 Pune, Maharashtra, India</p>
+        <p>🌐 Serving users worldwide</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 FreeToolsHub. All tools are 100% free and private.</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript for form handling (simulates success if not Netlify) -->
+  <script>
+    (function() {
+      const form = document.getElementById('contactForm');
+      const successMsg = document.getElementById('successMessage');
+
+      // If Netlify is detected, it will handle the form natively.
+      // We'll still prevent default for local demo.
+      form.addEventListener('submit', async (e) => {
+        // Check if we're on Netlify (data-netlify="true" will be processed by Netlify automatically)
+        // For local testing, we'll prevent default and simulate success.
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+          e.preventDefault();
+          // Simulate form submission delay
+          setTimeout(() => {
+            successMsg.style.display = 'block';
+            form.reset();
+            setTimeout(() => {
+              successMsg.style.display = 'none';
+            }, 5000);
+          }, 500);
+        } else {
+          // On live site, Netlify will handle it, but we can still show success on redirect?
+          // Netlify redirects to a page with ?success=true, we can capture that.
+          const urlParams = new URLSearchParams(window.location.search);
+          if (urlParams.has('success')) {
+            successMsg.style.display = 'block';
+          }
+        }
+      });
+
+      // If on live and success param, show message
+      if (window.location.search.includes('success=true')) {
+        successMsg.style.display = 'block';
+      }
+    })();
+  </script>
+</body>
+</html>
